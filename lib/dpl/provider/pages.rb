@@ -38,6 +38,7 @@ module DPL
 
         @gh_fqdn = fqdn
         @gh_url = options[:github_url] || 'github.com'
+        @gh_api_endpoint = options[:github_url] ? "https://#{@gh_url}/api/v3/" : nil
         @gh_token = option(:github_token)
         @keep_history = !!keep_history
         @allow_empty_commit = !!allow_empty_commit
@@ -83,7 +84,7 @@ module DPL
       def api  # Borrowed from Releases provider
         error 'gh-token must be provided for Pages provider to work.' unless @gh_token
 
-        @api ||= Octokit::Client.new(:access_token => @gh_token)
+        @api ||= Octokit::Client.new(:access_token => @gh_token, :api_endpoint => @gh_api_endpoint)
       end
 
       def user
